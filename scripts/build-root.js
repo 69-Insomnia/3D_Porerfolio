@@ -34,8 +34,19 @@ async function main() {
     if (!fs.existsSync(clientNext)) {
       throw new Error('Client .next folder not found after build');
     }
+
+    const clientPublic = path.join(clientRoot, 'public');
+    const rootPublic = path.join(projectRoot, 'public');
+
     copyDir(clientNext, rootNext);
     console.log('Copied client/.next to root .next');
+
+    if (fs.existsSync(clientPublic)) {
+      copyDir(clientPublic, rootPublic);
+      console.log('Copied client/public to root public');
+    } else {
+      console.warn('Warning: client/public folder not found. Images may not be served correctly.');
+    }
   } catch (error) {
     console.error(error);
     process.exit(1);
